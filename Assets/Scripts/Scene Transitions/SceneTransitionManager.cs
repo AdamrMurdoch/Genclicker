@@ -3,102 +3,207 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class SceneTransitionManager : MonoBehaviour
 {
-    [Header("Transition Settings")]
-    public RectTransform panel;
-    public float slideDuration = 0.25f;
-    public float slideDistance = 2000f;
-
-    [Header("Fade Settings")]
-    public float fadeDuration = 1f;
+    [SerializeField] private RectTransform Panel;
+    [SerializeField] private float SlideDuration = 0.45f;
+    [SerializeField] private float FadeDuration = 1f;
 
     private bool isTransitioning = false;
-    private Canvas transitionCanvas;
-    public static System.Action OnSceneReady;
+    private Canvas TransitionCanvas;
+    public static event System.Action OnSceneReady;
+    [SerializeField] private Color PanelFadeColourBefore = new Color32(18, 17, 18, 0);
+    [SerializeField] private Color PanelFadeColourAfter = new Color32(18, 17, 18, 255);
+    private int SortingLayerAboveNumber = 9999;
+    private int SortingLayerBelowNumber = -1000;
+    private string SortingLayerTagName = "UI";
+    [SerializeField] private float FadeDurationForSlide = 0.21f;
+    private string SlideDirection = "Next";
+
+    private CanvasGroup TargetCanvasGroup;
+    private Vector2 canvasSize;
+    private Image PanelImage;
+    private Vector2 slideOffset;
+    private float adjustedDuration;
+    private RectTransform TransitionCanvasRect;
 
     private void Start()
     {
-        slideDuration = 0.45f;
-        if (panel == null)
+        if (Panel == null)
         {
-            panel = GetComponent<RectTransform>();
-            if (panel == null)
-            {
-                Debug.LogWarning("Skipping the slide animation as no panel was found for the transition.");
-            }
+            Panel = GetComponent<RectTransform>();
         }
 
-        if (panel != null)
+        if (Panel == null)
         {
-            transitionCanvas = panel.GetComponentInParent<Canvas>();
+            Debug.LogWarning("Skipping the slide animation as no Panel was found... Great job!");
+            return;
         }
+
+        PanelImage = Panel.GetComponent<Image>();
+        TargetCanvasGroup = Panel.GetComponent<CanvasGroup>();
+        if (TargetCanvasGroup == null)
+        {
+            TargetCanvasGroup = Panel.gameObject.AddComponent<CanvasGroup>();
+        }
+
+        TransitionCanvas = Panel.GetComponentInParent<Canvas>();
+        TransitionCanvasRect = TransitionCanvas != null ? TransitionCanvas.GetComponent<RectTransform>() : null;
     }
 
     public void OnSceneChanged(string sceneName)
     {
-        if (!isTransitioning)
+        if (!SingletonGlobal.Instance.IsSceneTransitioning)
         {
-            StartCoroutine(Transition(sceneName));
+            StartCoroutine(Transition(sceneName, false));
         }
     }
 
     public void OnSceneChangedFade(string sceneName, float transitionLength)
     {
-        if (!isTransitioning)
+        if (!SingletonGlobal.Instance.IsSceneTransitioning)
         {
             if (sceneName == "Home")
             {
-                panel.GetComponent<Image>().color = new Color32(18, 17, 18, 0);
+                PanelImage.color = PanelFadeColourBefore;
             }
-            fadeDuration = transitionLength;
+            FadeDuration = transitionLength;
             StartCoroutine(Transition(sceneName, true));
         }
     }
 
     public void OnSceneChangedFadeSpecial(string sceneName, float transitionLength)
     {
-        if (!isTransitioning)
+        if (!SingletonGlobal.Instance.IsSceneTransitioning)
         {
-            fadeDuration = transitionLength;
+            FadeDuration = transitionLength;
             StartCoroutine(Transition(sceneName, true));
         }
     }
 
-    private IEnumerator Transition(string sceneName)
+    private EventSystem FindEventSystemInScene(Scene scene)
     {
-        return Transition(sceneName, false);
+        foreach (var root in scene.GetRootGameObjects())
+        {
+            var eventSystem = root.GetComponentInChildren<EventSystem>(true);
+            if (eventSystem != null)
+            {
+                return eventSystem;
+            }
+        }
+        return null;
     }
+
+
+    private void KeepOnlyEventSystemFromScene(Scene newScene)
+    {
+        var newSceneEventSystem = FindEventSystemInScene(newScene);
+        var allListeners = FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+
+        if (newSceneEventSystem == null)
+        {
+            if (allListeners.Length == 0)
+            {
+                return;
+            }
+            var keep = allListeners[0];
+            foreach (var eventSystem in allListeners)
+            {
+                if(newSceneEventSystem != null && eventSystem == newSceneEventSystem)
+                {
+                    eventSystem.enabled = true;
+                }
+                else
+                {
+                   eventSystem.enabled = false; 
+                }
+            }
+            return;
+        }
+
+        if (newSceneEventSystem == null && allListeners.Length > 0)
+        {
+            allListeners[0].enabled = true;   
+        }
+    }
+
+    private AudioListener FindAudioListenerInScene(Scene scene)
+    {
+        foreach (var root in scene.GetRootGameObjects())
+        {
+            var listener = root.GetComponentInChildren<AudioListener>(true);
+            if (listener != null)
+            {
+                return listener;
+            }
+        }
+        return null;
+    }
+
+    private void KeepOnlyAudioListenerFromScene(Scene newScene)
+    {
+        var newSceneListener = FindAudioListenerInScene(newScene);
+        var allListeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
+
+        if (newSceneListener == null)
+        {
+            if (allListeners.Length == 0)
+            {
+                return;
+            }
+
+            var keep = allListeners[0];
+            foreach (var audioListener in allListeners)
+            {
+                bool value = audioListener == keep;
+                audioListener.enabled = value;
+            }    
+            return;
+        }
+
+        foreach (var audioListener in allListeners)
+        {
+            audioListener.enabled = audioListener == newSceneListener;
+        }
+    }
+
+    private void SetAllEventSystemsEnabled(bool enabled)
+    {
+        var systems = FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+        foreach (var eventSystem in systems)
+        {
+            eventSystem.enabled = enabled;
+        }
+    }
+
+    private void DisableAllAudioListeners()
+    {
+        var allListeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
+        foreach (var audioListener in allListeners)
+        {
+            audioListener.enabled = false;
+        }
+    }
+
 
     private IEnumerator Transition(string sceneName, bool useFade)
     {
-        isTransitioning = true;
-
-        var currentEventSystems = FindObjectsByType<UnityEngine.EventSystems.EventSystem>(FindObjectsSortMode.None);
-        foreach (var es in currentEventSystems)
-        {
-            es.gameObject.SetActive(false);
-        }
-
-        var currentListeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
-        foreach (var al in currentListeners)
-        {
-            al.enabled = false;
-        }
-
-        Scene oldScene = gameObject.scene;
+        SetAllEventSystemsEnabled(false);
+        SingletonGlobal.Instance.IsSceneTransitioning = true;
+        Scene oldScene = SceneManager.GetActiveScene();
 
         int originalSortOrder = 0;
         string originalSortingLayer = "";
-        if (transitionCanvas != null)
+        if (TransitionCanvas != null)
         {
-            originalSortOrder = transitionCanvas.sortingOrder;
-            originalSortingLayer = transitionCanvas.sortingLayerName;
+            originalSortOrder = TransitionCanvas.sortingOrder;
+            originalSortingLayer = TransitionCanvas.sortingLayerName;
 
-            transitionCanvas.sortingLayerName = "UI";
-            transitionCanvas.sortingOrder = 9999;
-            transitionCanvas.overrideSorting = true;
+            TransitionCanvas.sortingLayerName = SortingLayerTagName;
+            TransitionCanvas.sortingOrder = SortingLayerAboveNumber;
+            TransitionCanvas.overrideSorting = true;
         }
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
@@ -109,6 +214,7 @@ public class SceneTransitionManager : MonoBehaviour
             yield return null;
         }
 
+        DisableAllAudioListeners();
         asyncLoad.allowSceneActivation = true;
 
         while (!asyncLoad.isDone)
@@ -125,32 +231,23 @@ public class SceneTransitionManager : MonoBehaviour
             canvasBackup.Add((canvas, canvas.sortingOrder, canvas.sortingLayerName, canvas.overrideSorting));
             canvas.overrideSorting = true;
             canvas.sortingLayerName = "Default";
-            canvas.sortingOrder = -1000;
+            canvas.sortingOrder = SortingLayerBelowNumber;
         }
 
         SceneManager.SetActiveScene(newScene);
 
-        yield return Resources.UnloadUnusedAssets();
+        var newEventSystem = FindEventSystemInScene(newScene);
+        if (newEventSystem != null)
+        {
+            newEventSystem.gameObject.SetActive(true);
+            newEventSystem.enabled = true;
+        }
+        KeepOnlyEventSystemFromScene(newScene);
+
+        yield return null;
+        KeepOnlyAudioListenerFromScene(newScene);
+
         yield return new WaitForEndOfFrame();
-
-        var newEventSystems = FindObjectsByType<UnityEngine.EventSystems.EventSystem>(FindObjectsSortMode.None);
-        if (newEventSystems.Length > 0)
-        {
-            foreach (var es in newEventSystems)
-            {
-                es.gameObject.SetActive(true);
-            }
-        }
-
-        var newListeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
-        if (newListeners.Length > 0)
-        {
-            newListeners[0].enabled = true;
-            for (int i = 1; i < newListeners.Length; i++)
-            {
-                newListeners[i].enabled = false;
-            }
-        }
 
         OnSceneReady?.Invoke();
 
@@ -161,7 +258,7 @@ public class SceneTransitionManager : MonoBehaviour
             backup.canvas.overrideSorting = backup.overrideSorting;
         }
 
-        if (useFade)
+        if (useFade == true)
         {
             yield return StartCoroutine(FadeOutPanel());
         }
@@ -170,20 +267,22 @@ public class SceneTransitionManager : MonoBehaviour
             yield return StartCoroutine(SlideOutPanel());
         }
 
-        if (transitionCanvas != null)
+        if (TransitionCanvas != null)
         {
-            transitionCanvas.sortingOrder = originalSortOrder;
-            transitionCanvas.sortingLayerName = originalSortingLayer;
-            transitionCanvas.overrideSorting = false;
+            TransitionCanvas.sortingOrder = originalSortOrder;
+            TransitionCanvas.sortingLayerName = originalSortingLayer;
+            TransitionCanvas.overrideSorting = false;
         }
+
+        KeepOnlyEventSystemFromScene(SceneManager.GetActiveScene());
+
+        SingletonGlobal.Instance.IsSceneTransitioning = false;
 
         AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(oldScene);
         while (unloadOp != null && !unloadOp.isDone)
         {
             yield return null;
         }
-
-        isTransitioning = false;
     }
 
 
@@ -203,138 +302,134 @@ public class SceneTransitionManager : MonoBehaviour
 
     private IEnumerator SlideOutPanel()
     {
-        if (panel == null)
+        if (Panel == null || TargetCanvasGroup == null || TransitionCanvasRect == null)
         {
+            Debug.Log("SlideOutPanel has found that either Panel, TargetCanvasGroup, or TransitionCanvasRect is missing.");
             yield break;
         }
+        SetupSlidePanel();
+        SetupSlideDirection();
 
-        CanvasGroup cg = EnsureCanvasGroup();
-        if (cg == null)
-        {
-            yield break;
-        }
-
-        Vector2 canvasSize = panel.GetComponentInParent<Canvas>().GetComponent<RectTransform>().rect.size;
-        Image panelImage = panel.GetComponent<Image>();
-        panelImage.color = new Color32(18, 17, 18, 0);
-        Vector2 slideOffset;
-        //string direction = SingletonGlobal.Instance?.SceneTransitionDirection ?? "next";
-        string direction = "next";
-
-        float adjustedDuration = slideDuration;
-
-        switch (direction.ToLower())
-        {
-            case "back":
-                {
-                    slideOffset = new Vector2(canvasSize.x, 0f);
-                    break;
-                }
-            case "next":
-                {
-                    slideOffset = new Vector2(-canvasSize.x, 0f);
-                    break;
-                }
-            case "up":
-                {
-                    slideOffset = new Vector2(0f, canvasSize.y);
-                    adjustedDuration = slideDuration * 0.90f;
-                    break;
-                }
-            case "down":
-                {
-                    slideOffset = new Vector2(0f, -canvasSize.y);
-                    adjustedDuration = slideDuration * 0.90f;
-                    break;
-                }
-            default:
-                {
-                    slideOffset = new Vector2(-canvasSize.x, 0f);
-                    break;
-                }
-        }
-
-        Vector3 startPos = panel.localPosition;
-        Vector3 endPos = startPos + (Vector3)slideOffset;
+        Vector2 startPos = Panel.anchoredPosition;
+        Vector2 endPos = startPos + slideOffset;
 
         float totalDuration = adjustedDuration;
 
-        float fadeDurationForSlide = 0.21f;
-
-        cg.alpha = 1f;
-        cg.blocksRaycasts = true;
-        cg.interactable = true;
+        TargetCanvasGroup.alpha = 1f;
+        TargetCanvasGroup.blocksRaycasts = true;
+        TargetCanvasGroup.interactable = true;
 
         float elapsed = 0f;
         while (elapsed < totalDuration)
         {
             elapsed += Time.deltaTime;
-            float tTotal = Mathf.Clamp01(elapsed / totalDuration);
 
-            float tPos = adjustedDuration > 0f ? Mathf.Clamp01(elapsed / adjustedDuration) : 1f;
-            tPos = EaseInOutQuad(tPos);
-            panel.localPosition = Vector3.Lerp(startPos, endPos, tPos);
+            float temporaryPosition = adjustedDuration > 0f ? Mathf.Clamp01(elapsed / adjustedDuration) : 1f;
+            temporaryPosition = EaseInOutQuad(temporaryPosition);
+            Panel.anchoredPosition = Vector2.Lerp(startPos, endPos, temporaryPosition);
 
-            float tFade = fadeDurationForSlide > 0f ? Mathf.Clamp01(elapsed / fadeDurationForSlide) : 1f;
-            tFade = EaseInOutQuad(tFade);
-            cg.alpha = Mathf.Lerp(1f, 0f, tFade);
+            float fadeTime = FadeDurationForSlide > 0f ? Mathf.Clamp01(elapsed / FadeDurationForSlide) : 1f;
+            fadeTime = EaseInOutQuad(fadeTime);
+            TargetCanvasGroup.alpha = Mathf.Lerp(1f, 0f, fadeTime);
 
             yield return null;
         }
 
-        panel.localPosition = endPos;
-        panelImage.color = new Color32(18, 17, 18, 255);
-        cg.alpha = 0f;
-        cg.blocksRaycasts = false;
-        cg.interactable = false;
+        Panel.anchoredPosition = endPos;
+        PanelImage.color = PanelFadeColourBefore;
+        TargetCanvasGroup.alpha = 0f;
+        TargetCanvasGroup.blocksRaycasts = false;
+        TargetCanvasGroup.interactable = false;
     }
 
-    private CanvasGroup EnsureCanvasGroup()
+    private void SetupSlidePanel()
     {
-        if (panel == null)
+        Debug.Log("SetupSlidePanel started");
+
+        if (Panel == null)
         {
-            return null;
+            Debug.Log("panel not found");
+            return;
         }
-        CanvasGroup cg = panel.GetComponent<CanvasGroup>();
-        if (cg == null)
+
+        if (TargetCanvasGroup == null)
         {
-            cg = panel.gameObject.AddComponent<CanvasGroup>();
+            Debug.Log("targetCanvasGroup not found");
+            return;
         }
-        return cg;
+
+        canvasSize = TransitionCanvasRect.rect.size;
+        PanelImage.color = PanelFadeColourBefore;
+    }
+
+    private void SetupSlideDirection()
+    {
+        switch (SlideDirection.ToLower())
+        {
+            case "back":
+            {
+                slideOffset = new Vector2(canvasSize.x, 0f);
+                adjustedDuration = SlideDuration;
+                break;
+            }
+            case "next":
+            {
+                slideOffset = new Vector2(-canvasSize.x, 0f);
+                adjustedDuration = SlideDuration;
+                break;
+            }
+            case "up":
+            {
+                slideOffset = new Vector2(0f, canvasSize.y);
+                adjustedDuration = SlideDuration * 0.90f;
+                break;
+            }
+            case "down":
+            {
+                slideOffset = new Vector2(0f, -canvasSize.y);
+                adjustedDuration = SlideDuration * 0.90f;
+                break;
+            }
+            default:
+            {
+                slideOffset = new Vector2(-canvasSize.x, 0f);
+                adjustedDuration = SlideDuration;
+                break;
+            }
+        }
     }
 
     private IEnumerator FadeOutPanel()
     {
-        if (panel == null)
+        if (Panel == null)
         {
             yield break;
         }
 
-        CanvasGroup cg = EnsureCanvasGroup();
-        if (cg == null)
+        if (TargetCanvasGroup == null)
         {
             yield break;
         }
 
-        cg.alpha = 1f;
-        cg.blocksRaycasts = true;
-        cg.interactable = true;
-        float adjustedDuration = fadeDuration;
+        TargetCanvasGroup.alpha = 1f;
+        TargetCanvasGroup.blocksRaycasts = true;
+        TargetCanvasGroup.interactable = true;
+        adjustedDuration = FadeDuration;
         float elapsed = 0f;
         while (elapsed < adjustedDuration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / adjustedDuration);
-            t = EaseInOutQuad(t);
-            cg.alpha = Mathf.Lerp(1f, 0f, t);
+            float time = Mathf.Clamp01(elapsed / adjustedDuration);
+            time = EaseInOutQuad(time);
+            TargetCanvasGroup.alpha = Mathf.Lerp(1f, 0f, time);
 
             yield return null;
         }
 
-        cg.alpha = 0f;
-        panel.GetComponent<Image>().color = new Color32(18, 17, 18, 255);
-        cg.blocksRaycasts = false;
-        cg.interactable = false;
+        TargetCanvasGroup.alpha = 0f;
+        PanelImage.color = PanelFadeColourAfter;
+        TargetCanvasGroup.blocksRaycasts = false;
+        TargetCanvasGroup.interactable = false;
     }
 
     private float EaseInOutQuad(float t)

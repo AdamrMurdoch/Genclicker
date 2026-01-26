@@ -13,7 +13,22 @@ public class BackendApiClient
         this.baseUrl = baseUrl.TrimEnd('/');
     }
 
-    private string Token => PlayerPrefs.GetString("authToken", "");
+    private const string TokenKey = "TheTokenIsAlwaysWatching";
+
+    public string Token => PlayerPrefs.GetString(TokenKey, "");
+
+    public void SetToken(string token)
+    {
+        if (string.IsNullOrEmpty(token))
+        {
+            PlayerPrefs.DeleteKey(TokenKey);
+        }
+        else
+        {
+            PlayerPrefs.SetString(TokenKey, token);
+        }
+        PlayerPrefs.Save();
+    }
 
     private UnityWebRequest CreateRequest(string url, string method, string jsonBody = null)
     {
@@ -33,6 +48,105 @@ public class BackendApiClient
         }
 
         return req;
+    }
+
+    public IEnumerator RegisterAccount(RegisterRequest payload, System.Action<AuthResponse> onSuccess, System.Action<string> onError)
+    {
+        string json = JsonConvert.SerializeObject(payload);
+
+        using (var req = CreateRequest($"{baseUrl}/api/auth/register", "POST", json))
+        {
+            yield return req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
+            {
+                onError?.Invoke($"{req.responseCode}: {req.error} | {req.downloadHandler.text}");
+                yield break;
+            }
+
+            AuthResponse response;
+            try 
+            { 
+                response = JsonConvert.DeserializeObject<AuthResponse>(req.downloadHandler.text);     
+            }
+            catch (System.Exception e)
+            {
+                onError?.Invoke($"Register parse failed: {e.Message}");
+                yield break;
+            }
+
+            if (string.IsNullOrEmpty(response?.token))
+            {
+                onError?.Invoke($"Register was successful but the token is missing.");
+                yield break;
+            }
+
+            SetToken(response.token);
+            onSuccess?.Invoke(response);
+        }
+    }
+
+    public IEnumerator Login(LoginRequest payload, System.Action<AuthResponse> onSuccess, System.Action<string> onError)
+    {
+        string json = JsonConvert.SerializeObject(payload);
+
+        using (var req = CreateRequest($"{baseUrl}/api/auth/login", "POST", json))
+        {
+            yield return req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
+            {
+                onError?.Invoke($"{req.responseCode}: {req.error} | {req.downloadHandler.text}");
+                yield break;
+            }
+
+            AuthResponse response;
+            try 
+            { 
+                response = JsonConvert.DeserializeObject<AuthResponse>(req.downloadHandler.text); 
+            }
+            catch (System.Exception e)
+            {
+                onError?.Invoke($"Login JSON parse failed: {e.Message}");
+                yield break;
+            }
+
+            if (string.IsNullOrEmpty(response?.token))
+            {
+                onError?.Invoke($"Login has succeeded but the token is missing!");
+                yield break;
+            }
+
+            SetToken(response.token);
+            onSuccess?.Invoke(response);
+        }
+    }
+
+    public IEnumerator GetUser(System.Action<AuthUser> onSuccess, System.Action<string> onError)
+    {
+        using (var req = CreateRequest($"{baseUrl}/api/auth/me", "GET"))
+        {
+            yield return req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
+            {
+                onError?.Invoke($"{req.responseCode}: {req.error} | {req.downloadHandler.text}");
+                yield break;
+            }
+
+            AuthUser user;
+            try 
+            { 
+                user = JsonConvert.DeserializeObject<AuthUser>(req.downloadHandler.text); 
+            }
+            catch (System.Exception e)
+            {
+                onError?.Invoke($"GetMe JSON parse failed: {e.Message}");
+                yield break;
+            }
+
+            onSuccess?.Invoke(user);
+        }
     }
 
     public IEnumerator GetSave(System.Action<SavePayload> onSuccess, System.Action<string> onError)
@@ -70,4 +184,3 @@ public class BackendApiClient
         }
     }
 }
-

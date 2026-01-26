@@ -26,8 +26,8 @@ public class SaveSingleton : MonoBehaviour
         BackendApi = new BackendApiClient(baseUrl);
     }
 
-    // Called via StartCoroutine(SaveSingleton.Instance.LoadData());
-    public IEnumerator LoadData()
+    // Called via StartCoroutine(SaveSingleton.Instance.LoadAllData());
+    public IEnumerator LoadAllData()
     {
         yield return BackendApi.GetSave(onSuccess: (payload) =>
             {
@@ -47,8 +47,8 @@ public class SaveSingleton : MonoBehaviour
         );
     }
 
-    // Called via StartCoroutine(SaveSingleton.Instance.SaveData());
-    public IEnumerator SaveData()
+    // Called via StartCoroutine(SaveSingleton.Instance.SaveAllData());
+    public IEnumerator SaveAllData()
     {
         Save.updatedAt = System.DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 

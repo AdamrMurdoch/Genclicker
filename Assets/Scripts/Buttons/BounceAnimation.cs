@@ -12,7 +12,7 @@ public class BounceAnimation : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     [SerializeField] private float releaseAnimationDuration = 0.3f;
     [SerializeField] private AnimationCurve pressAnimationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     [SerializeField] private AnimationCurve releaseAnimationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-    
+
     [Header("Bounce Settings")]
     [SerializeField] private bool enableBounce = true;
     [SerializeField] private float bounceOvershoot = 1.02f;
@@ -20,229 +20,152 @@ public class BounceAnimation : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     [SerializeField] private float bounceDuration = 0.26f;
     [SerializeField] private float settleDuration = 0.19f;
     [SerializeField] private float dynamicTiming = 0.5f;
-    
+
     [Header("Press Tracking")]
     [SerializeField] private float maxPressDuration = 1f;
     [SerializeField] private float forceBounceMultiplier = 1.5f;
-    
+
     [Header("Haptics")]
     public int VibrationType;
-    
-    [Header("Scroll Detection")]
-    [SerializeField] private float scrollVelocityThreshold = 30f;
-    [SerializeField] private bool debugScrollDetection = false;
-    
+
     private Vector3 originalScale;
     private Coroutine currentAnimation;
     private Button buttonComponent;
-    private ScrollRect parentScrollRect;
+
     private float pressStartTime;
-    private float actualPressDuration;
-    private bool isPressed = false;
-    private bool isPotentialScroll = false;
-    
-    void Awake()
+    private bool isPressed;
+
+    private void Awake()
     {
-        // Get the button component
         buttonComponent = GetComponent<Button>();
-        
-        if (buttonComponent == null)
-        {
-            Debug.LogError("TapSizing: No Button component found on " + gameObject.name);
-        }
-    }
-    
-    void Start()
-    {
         originalScale = transform.localScale;
-        parentScrollRect = GetComponentInParent<ScrollRect>();
-        
-        if (parentScrollRect == null)
-        {
-            GameObject scrollObject = GameObject.Find("Scroll");
-            if (scrollObject != null)
-            {
-                parentScrollRect = scrollObject.GetComponent<ScrollRect>();
-            }
-        }
     }
-    
+
+    private void OnEnable()
+    {
+        ResetButton();
+    }
+
+    private void OnDisable()
+    {
+        ResetButton();
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!buttonComponent.interactable) return;
-        
-        if (IsScrolling())
+        if (buttonComponent == null || !buttonComponent.interactable)
         {
-            isPotentialScroll = true;
             return;
         }
-        
-        isPotentialScroll = false;
+
         isPressed = true;
         pressStartTime = Time.time;
-        
-        if (currentAnimation != null)
-        {
-            StopCoroutine(currentAnimation);
-            currentAnimation = null;
-        }
-        
-        currentAnimation = StartCoroutine(AnimateScale(originalScale * pressedScale, pressAnimationDuration, pressAnimationCurve));
+
+        StartScaleTo(originalScale * pressedScale, pressAnimationDuration, pressAnimationCurve);
     }
-    
+
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!isPressed || isPotentialScroll) 
+        if (buttonComponent == null || !buttonComponent.interactable)
         {
-            isPotentialScroll = false;
             return;
         }
-        
-        if (IsScrolling())
-        {
-            if (currentAnimation != null)
-            {
-                StopCoroutine(currentAnimation);
-            }
-            currentAnimation = StartCoroutine(AnimateScale(originalScale, pressAnimationDuration, pressAnimationCurve));
-            isPressed = false;
-            isPotentialScroll = false;
-            return;
-        }
-        
+
+        float actualPressDuration = isPressed ? (Time.time - pressStartTime) : 0.1f;
         isPressed = false;
-        actualPressDuration = Time.time - pressStartTime;
-        
+
+        StartRelease(actualPressDuration);
+    }
+
+    private void StartScaleTo(Vector3 target, float duration, AnimationCurve curve)
+    {
         if (currentAnimation != null)
         {
             StopCoroutine(currentAnimation);
         }
-        
-        currentAnimation = StartCoroutine(AnimateReleaseWithDuration(actualPressDuration));
+        currentAnimation = StartCoroutine(AnimateScale(target, duration, curve));
     }
-    
-    private bool IsScrolling()
+
+    private void StartRelease(float pressDuration)
     {
-        if (parentScrollRect == null)
+        if (currentAnimation != null)
         {
-            return false;
+            StopCoroutine(currentAnimation);
         }
-        
-        Vector2 velocity = parentScrollRect.velocity;
-        float velocityMagnitude = velocity.magnitude;
-        
-        return velocityMagnitude > scrollVelocityThreshold;
+        currentAnimation = StartCoroutine(AnimateReleaseWithDuration(pressDuration));
     }
-    
+
     private IEnumerator AnimateScale(Vector3 targetScale, float duration, AnimationCurve curve)
     {
         Vector3 startScale = transform.localScale;
-        float elapsedTime = 0f;
-        
-        while (elapsedTime < duration)
+        float t = 0f;
+
+        while (t < duration)
         {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / duration;
-            float curveValue = curve.Evaluate(t);
-            transform.localScale = Vector3.Lerp(startScale, targetScale, curveValue);
-            
+            t += Time.unscaledDeltaTime;
+            float p = Mathf.Clamp01(t / duration);
+            float cv = curve.Evaluate(p);
+            transform.localScale = Vector3.Lerp(startScale, targetScale, cv);
             yield return null;
         }
-        
+
         transform.localScale = targetScale;
     }
-    
+
     private IEnumerator AnimateReleaseWithDuration(float pressDuration)
     {
-        if (enableBounce)
+        if (!enableBounce)
         {
-            yield return StartCoroutine(AnimateBounceRelease(pressDuration));
+            yield return AnimateScale(originalScale, releaseAnimationDuration, releaseAnimationCurve);
+            yield break;
         }
-        else
+
+        float normalized = Mathf.Clamp01(pressDuration / maxPressDuration);
+        float force = 1f + (normalized * forceBounceMultiplier);
+        float dyn = 1f + (normalized * dynamicTiming);
+
+        Vector3 start = transform.localScale;
+        Vector3 overshoot = originalScale * (1f + (bounceOvershoot - 1f) * force);
+        Vector3 undershoot = originalScale * (1f - (1f - bounceUndershoot) * force);
+
+        float p1 = bounceDuration * 0.4f;
+        float p2 = bounceDuration * 0.6f;
+        float p3 = settleDuration * dyn;
+
+        float e = 0f;
+        while (e < p1)
         {
-            yield return StartCoroutine(AnimateScale(originalScale, releaseAnimationDuration, releaseAnimationCurve));
-        }
-    }
-    
-    private IEnumerator AnimateBounceRelease(float pressDuration)
-    {
-        Vector3 startScale = transform.localScale;
-        
-        float normalizedPressDuration = Mathf.Clamp01(pressDuration / maxPressDuration);
-        float forceMultiplier = 1f + (normalizedPressDuration * forceBounceMultiplier);
-        
-        Vector3 overshootScale = originalScale * (1f + (bounceOvershoot - 1f) * forceMultiplier);
-        Vector3 undershootScale = originalScale * (1f - (1f - bounceUndershoot) * forceMultiplier);
-        
-        float dynamicMultiplier = 1f + (normalizedPressDuration * dynamicTiming);
-        
-        float totalDuration = releaseAnimationDuration * dynamicMultiplier;
-        float phase1Duration = bounceDuration * 0.4f;
-        float phase2Duration = bounceDuration * 0.6f;
-        float phase3Duration = settleDuration * dynamicMultiplier;
-        
-        float elapsedTime = 0f;
-        
-        while (elapsedTime < phase1Duration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / phase1Duration;
-            float curveValue = 1f - Mathf.Pow(1f - t, 2f);
-            
-            transform.localScale = Vector3.Lerp(startScale, overshootScale, curveValue);
+            e += Time.unscaledDeltaTime;
+            float x = Mathf.Clamp01(e / p1);
+            float cv = 1f - Mathf.Pow(1f - x, 2f);
+            transform.localScale = Vector3.Lerp(start, overshoot, cv);
             yield return null;
         }
-        
-        elapsedTime = 0f;
-        startScale = transform.localScale;
-        
-        while (elapsedTime < phase2Duration)
+
+        e = 0f;
+        while (e < p2)
         {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / phase2Duration;
-            float curveValue = Mathf.Sin(t * Mathf.PI * 0.5f);
-            
-            transform.localScale = Vector3.Lerp(overshootScale, undershootScale, curveValue);
+            e += Time.unscaledDeltaTime;
+            float x = Mathf.Clamp01(e / p2);
+            float cv = Mathf.Sin(x * Mathf.PI * 0.5f);
+            transform.localScale = Vector3.Lerp(overshoot, undershoot, cv);
             yield return null;
         }
-        
-        elapsedTime = 0f;
-        startScale = transform.localScale;
-        
-        while (elapsedTime < phase3Duration)
+
+        e = 0f;
+        while (e < p3)
         {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / phase3Duration;
-            
-            float curveValue = 1f - Mathf.Exp(-5f * t) * (1f - t);
-            
-            float oscillation = Mathf.Sin(t * Mathf.PI * 3f) * (1f - t) * 0.02f * forceMultiplier;
-            
-            transform.localScale = Vector3.Lerp(undershootScale, originalScale, curveValue + oscillation);
+            e += Time.unscaledDeltaTime;
+            float x = Mathf.Clamp01(e / p3);
+            float cv = 1f - Mathf.Exp(-5f * x) * (1f - x);
+            float osc = Mathf.Sin(x * Mathf.PI * 3f) * (1f - x) * 0.02f * force;
+            transform.localScale = Vector3.Lerp(undershoot, originalScale, cv + osc);
             yield return null;
         }
-        
+
         transform.localScale = originalScale;
     }
-    
-    public void SimulatePress(float simulatedDuration = 0.1f)
-    {
-        StartCoroutine(AnimateSimulatedPressAndRelease(simulatedDuration));
-    }
-    
-    private IEnumerator AnimateSimulatedPressAndRelease(float simulatedDuration)
-    {
-        if (currentAnimation != null)
-        {
-            StopCoroutine(currentAnimation);
-            currentAnimation = null;
-        }
-        
-        yield return StartCoroutine(AnimateScale(originalScale * pressedScale, pressAnimationDuration, pressAnimationCurve));
-        yield return new WaitForSeconds(simulatedDuration);
-        yield return StartCoroutine(AnimateReleaseWithDuration(simulatedDuration));
-    }
-    
+
     public void ResetButton()
     {
         if (currentAnimation != null)
@@ -250,40 +173,8 @@ public class BounceAnimation : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             StopCoroutine(currentAnimation);
             currentAnimation = null;
         }
-        
-        StopAllCoroutines();
-        
+
         transform.localScale = originalScale;
         isPressed = false;
-    }
-    
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (isPressed && !isPotentialScroll)
-        {
-            if (IsScrolling())
-            {
-                if (currentAnimation != null)
-                {
-                    StopCoroutine(currentAnimation);
-                }
-                currentAnimation = StartCoroutine(AnimateScale(originalScale, pressAnimationDuration, pressAnimationCurve));
-                isPressed = false;
-            }
-        }
-    }
-    
-    void OnDisable()
-    {
-        ResetButton();
-    }
-    
-    public void SetScrollRect(ScrollRect scrollRect)
-    {
-        parentScrollRect = scrollRect;
-        if (debugScrollDetection)
-        {
-            Debug.Log($"TapSizing: ScrollRect manually set for button {gameObject.name}");
-        }
     }
 }

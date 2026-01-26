@@ -4,9 +4,9 @@ using System;
 public class SaveData
 {
     public int UserCode;
-    public string Username;
-    public string password;
-    public string UserEmail;
+    public long PlayerMoney;
+    public int PlayerEnergy;
+    public int AchievementsCompleted;
+    public int WealthScore;
     public long updatedAt;
 }
-
