@@ -11,7 +11,6 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private float SlideDuration = 0.45f;
     [SerializeField] private float FadeDuration = 1f;
 
-    private bool isTransitioning = false;
     private Canvas TransitionCanvas;
     public static event System.Action OnSceneReady;
     [SerializeField] private Color PanelFadeColourBefore = new Color32(18, 17, 18, 0);
