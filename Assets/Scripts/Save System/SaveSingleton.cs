@@ -6,7 +6,7 @@ public class SaveSingleton : MonoBehaviour
     public static SaveSingleton Instance { get; private set; }
 
     // Backend API root URL (for example: "http://localhost:3000" when running locally)
-    [SerializeField] private string baseUrl = "https://exampleurl.com";
+    [SerializeField] private string baseUrl = "https://genclicker-backend.onrender.com";
 
     public SaveData Save { get; private set; } = new SaveData();
 
@@ -29,11 +29,14 @@ public class SaveSingleton : MonoBehaviour
     // Called via StartCoroutine(SaveSingleton.Instance.LoadAllData());
     public IEnumerator LoadAllData()
     {
-        yield return BackendApi.GetSave(onSuccess: (payload) =>
+        yield return BackendApi.GetSave(
+            onSuccess: (payload) =>
             {
                 if (payload == null)
                 {
                     Save = new SaveData();
+                    // create the document in Mongo right away
+                    StartCoroutine(SaveAllData());
                     return;
                 }
 

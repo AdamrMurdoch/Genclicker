@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 35011232}
   - component: {fileID: 35011231}
   - component: {fileID: 35011230}
+  - component: {fileID: 35011235}
   m_Layer: 0
   m_Name: Item 3
   m_TagString: Untagged
@@ -339,6 +340,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 35011228}
   m_CullTransparentMesh: 1
+--- !u!114 &35011235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35011228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1991f9ee4a20430408fd0ff4a87285e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BusinessesUIManager
+  ItemName: restraunt business
+  ItemStatusText: {fileID: 1878972396}
 --- !u!1 &117585927
 GameObject:
   m_ObjectHideFlags: 0
@@ -1024,6 +1039,7 @@ GameObject:
   - component: {fileID: 302966223}
   - component: {fileID: 302966227}
   - component: {fileID: 302966226}
+  - component: {fileID: 302966228}
   m_Layer: 0
   m_Name: Item 1
   m_TagString: Untagged
@@ -1230,6 +1246,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &302966228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302966221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1991f9ee4a20430408fd0ff4a87285e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BusinessesUIManager
+  ItemName: casino business
+  ItemStatusText: {fileID: 355596411}
 --- !u!1 &355596408
 GameObject:
   m_ObjectHideFlags: 0
@@ -2399,15 +2429,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8233389985232447987, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.31
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 8233389985232447987, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.31
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 8233389985232447987, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.31
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 8233389985232447987, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -3055,6 +3085,7 @@ GameObject:
   - component: {fileID: 1614814451}
   - component: {fileID: 1614814450}
   - component: {fileID: 1614814449}
+  - component: {fileID: 1614814454}
   m_Layer: 0
   m_Name: Item 2
   m_TagString: Untagged
@@ -3261,6 +3292,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1614814447}
   m_CullTransparentMesh: 1
+--- !u!114 &1614814454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614814447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1991f9ee4a20430408fd0ff4a87285e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BusinessesUIManager
+  ItemName: car dealership
+  ItemStatusText: {fileID: 757857567}
 --- !u!1 &1670176316
 GameObject:
   m_ObjectHideFlags: 0
@@ -3273,6 +3318,7 @@ GameObject:
   - component: {fileID: 1670176320}
   - component: {fileID: 1670176319}
   - component: {fileID: 1670176318}
+  - component: {fileID: 1670176321}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -3363,6 +3409,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1670176321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670176316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 509ddd793ad834347a4c5cdb8b72e658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Save
 --- !u!1 &1671023220
 GameObject:
   m_ObjectHideFlags: 0

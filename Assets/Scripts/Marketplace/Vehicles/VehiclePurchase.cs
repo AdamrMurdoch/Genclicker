@@ -29,6 +29,7 @@ public class VehiclePurchase : MonoBehaviour
     private int Price;
     private string ItemName;
     private int PerClickAmount;
+    private bool PurchaseSuccess;
 
     private void Start()
     {
@@ -89,6 +90,7 @@ public class VehiclePurchase : MonoBehaviour
     {
         if(SaveSingleton.Instance.Save.PlayerMoney >= Price)
         {
+            PurchaseSuccess = true;
             SaveSingleton.Instance.Save.PlayerMoney -= Price;
             Header.text = $"{ItemName} Purchased!";
             PopupExtraDescription = $"You successfully purchased a {ItemName} for ";
@@ -96,6 +98,7 @@ public class VehiclePurchase : MonoBehaviour
         }
         else
         {
+            PurchaseSuccess = false;
             Header.text = "Insufficient Savings";
             PopupExtraDescription = $"You attempted to purchase a {ItemName} for ";
             PopupExtra2Description = $"Please try again once you have sufficient savings for this purchase.";
@@ -110,6 +113,48 @@ public class VehiclePurchase : MonoBehaviour
         ButtonText3.text = "";
 
         ConfigurePopup();
+
+        if(PurchaseSuccess == true)
+        {
+            OwnItem();
+        }
+    }
+
+    private void OwnItem()
+    {
+        switch(ItemName)
+        {
+            case "Hatchback":
+            {
+                SaveSingleton.Instance.Save.HatchbackPurchased = true;
+                break;
+            }
+            case "Sedan":
+            {
+                SaveSingleton.Instance.Save.SedanPurchased = true;
+                break;
+            }
+            case "SUV":
+            {
+                SaveSingleton.Instance.Save.SUVPurchased = true;
+                break;
+            }
+            case "Sports Car":
+            {
+                SaveSingleton.Instance.Save.SportsCarPurchased = true;
+                break;
+            }
+            case "Super Car":
+            {
+                SaveSingleton.Instance.Save.SuperCarPurchased = true;
+                break;
+            }
+            case "Hyper Car":
+            {
+                SaveSingleton.Instance.Save.HyperCarPurchased = true;
+                break;
+            }
+        }
     }
 
     private void ConfigurePopup()

@@ -3,11 +3,11 @@ using TMPro;
 
 public class PlayerSavingsTextSet : MonoBehaviour
 {
-    public TextMeshProUGUI SavingsDisplay;
+    [SerializeField] private TextMeshProUGUI SavingsDisplay;
     public long MoneyValue;
 
     void Update()
     {
-        SavingsDisplay.text = string.Format("${0:n0}", MoneyValue);
+        SavingsDisplay.text = string.Format("${0:n0}", SaveSingleton.Instance.Save.PlayerMoney);
     }
 }

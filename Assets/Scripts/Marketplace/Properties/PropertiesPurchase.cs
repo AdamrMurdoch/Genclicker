@@ -42,6 +42,7 @@ public class PropertiesPurchase : MonoBehaviour
                     if(SaveSingleton.Instance.Save.PlayerMoney >= price)
                     {
                         SaveSingleton.Instance.Save.PlayerMoney -= price;
+                        SaveSingleton.Instance.Save.EastDrivePropertyPurchased = true;
                         Header.text = $"{ItemID} Purchased!";
                         PopupExtraDescription = $"You successfully purchased {ItemID} for ";
                         PopupExtra2Description = $"This property will now provide you with {string.Format("${0:n0}", perClickPrice)} per click.";
@@ -61,6 +62,7 @@ public class PropertiesPurchase : MonoBehaviour
                     if(SaveSingleton.Instance.Save.PlayerMoney >= price)
                     {
                         SaveSingleton.Instance.Save.PlayerMoney -= price;
+                        SaveSingleton.Instance.Save.BlessfrontAvenuePropertyPurchased = true;
                         Header.text = $"{ItemID} Purchased!";
                         PopupExtraDescription = $"You successfully purchased {ItemID} for ";
                         PopupExtra2Description = $"This property will now provide you with {string.Format("${0:n0}", perClickPrice)} per click.";
@@ -80,6 +82,7 @@ public class PropertiesPurchase : MonoBehaviour
                     if(SaveSingleton.Instance.Save.PlayerMoney >= price)
                     {
                         SaveSingleton.Instance.Save.PlayerMoney -= price;
+                        SaveSingleton.Instance.Save.DartbackAvenuePropertyPurchased = true;
                         Header.text = $"{ItemID} Purchased!";
                         PopupExtraDescription = $"You successfully purchased {ItemID} for ";
                         PopupExtra2Description = $"This property will now provide you with {string.Format("${0:n0}", perClickPrice)} per click.";

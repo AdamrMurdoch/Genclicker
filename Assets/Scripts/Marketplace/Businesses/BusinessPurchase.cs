@@ -57,6 +57,7 @@ public class BusinessPurchase : MonoBehaviour
                     if(SaveSingleton.Instance.Save.PlayerMoney >= price)
                     {
                         SaveSingleton.Instance.Save.PlayerMoney -= price;
+                        SaveSingleton.Instance.Save.CasinoBusinessPurchased = true;
                         Header.text = "Casino Business Purchased!";
                         PopupExtraDescription = $"You successfully purchased a {ItemID} for ";
                         PopupExtra2Description = $"This asset will now provide you with {string.Format("${0:n0}", perClickPrice)} per click.";
@@ -76,6 +77,7 @@ public class BusinessPurchase : MonoBehaviour
                     if(SaveSingleton.Instance.Save.PlayerMoney >= price)
                     {
                         SaveSingleton.Instance.Save.PlayerMoney -= price;
+                        SaveSingleton.Instance.Save.CarDealershipBusinessPurchased = true;
                         Header.text = "Car Dealership Purchased!";
                         PopupExtraDescription = $"You successfully purchased a {ItemID} for ";
                         PopupExtra2Description = $"This asset will now provide you with {string.Format("${0:n0}", perClickPrice)} per click.";
@@ -95,6 +97,7 @@ public class BusinessPurchase : MonoBehaviour
                     if(SaveSingleton.Instance.Save.PlayerMoney >= price)
                     {
                         SaveSingleton.Instance.Save.PlayerMoney -= price;
+                        SaveSingleton.Instance.Save.RestrauntBusinessPurchased = true;
                         Header.text = "Restraunt Business Purchased!";
                         PopupExtraDescription = $"You successfully purchased a {ItemID} for ";
                         PopupExtra2Description = $"This asset will now provide you with {string.Format("${0:n0}", perClickPrice)} per click.";

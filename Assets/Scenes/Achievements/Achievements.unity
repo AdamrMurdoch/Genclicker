@@ -459,6 +459,7 @@ GameObject:
   - component: {fileID: 201769318}
   - component: {fileID: 201769317}
   - component: {fileID: 201769316}
+  - component: {fileID: 201769321}
   m_Layer: 0
   m_Name: Achievement 2
   m_TagString: Untagged
@@ -653,6 +654,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 201769314}
   m_CullTransparentMesh: 1
+--- !u!114 &201769321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201769314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c31223f5a3d71f84ca52d324ca3a80ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AchievementsUIManager
+  AchievementIndex: 2
+  AchievementCompletionStatus: {fileID: 2122587393}
 --- !u!1 &207805340
 GameObject:
   m_ObjectHideFlags: 0
@@ -1026,6 +1041,7 @@ GameObject:
   - component: {fileID: 302966223}
   - component: {fileID: 302966227}
   - component: {fileID: 302966226}
+  - component: {fileID: 302966228}
   m_Layer: 0
   m_Name: Achievement 1
   m_TagString: Untagged
@@ -1220,6 +1236,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &302966228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302966221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c31223f5a3d71f84ca52d324ca3a80ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AchievementsUIManager
+  AchievementIndex: 1
+  AchievementCompletionStatus: {fileID: 600059805}
 --- !u!1 &507683432
 GameObject:
   m_ObjectHideFlags: 0
@@ -1526,6 +1556,7 @@ GameObject:
   - component: {fileID: 628984622}
   - component: {fileID: 628984621}
   - component: {fileID: 628984620}
+  - component: {fileID: 628984625}
   m_Layer: 0
   m_Name: Achievement 4
   m_TagString: Untagged
@@ -1720,6 +1751,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 628984618}
   m_CullTransparentMesh: 1
+--- !u!114 &628984625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628984618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c31223f5a3d71f84ca52d324ca3a80ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AchievementsUIManager
+  AchievementIndex: 4
+  AchievementCompletionStatus: {fileID: 5465624}
 --- !u!1 &838299877
 GameObject:
   m_ObjectHideFlags: 0
@@ -1734,6 +1779,7 @@ GameObject:
   - component: {fileID: 838299881}
   - component: {fileID: 838299880}
   - component: {fileID: 838299879}
+  - component: {fileID: 838299884}
   m_Layer: 0
   m_Name: Achievement 3
   m_TagString: Untagged
@@ -1928,6 +1974,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838299877}
   m_CullTransparentMesh: 1
+--- !u!114 &838299884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838299877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c31223f5a3d71f84ca52d324ca3a80ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AchievementsUIManager
+  AchievementIndex: 3
+  AchievementCompletionStatus: {fileID: 1242136912}
 --- !u!1 &930243674
 GameObject:
   m_ObjectHideFlags: 0
@@ -2884,6 +2944,7 @@ GameObject:
   - component: {fileID: 1670176320}
   - component: {fileID: 1670176319}
   - component: {fileID: 1670176318}
+  - component: {fileID: 1670176321}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -2974,6 +3035,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1670176321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670176316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 509ddd793ad834347a4c5cdb8b72e658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Save
 --- !u!1 &1779253182
 GameObject:
   m_ObjectHideFlags: 0

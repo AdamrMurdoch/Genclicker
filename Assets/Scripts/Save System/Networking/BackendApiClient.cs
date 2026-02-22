@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 public class BackendApiClient
 {
-    private readonly string baseUrl;
+    private readonly string baseUrl = "https://genclicker-backend.onrender.com";
 
     public BackendApiClient(string baseUrl)
     {

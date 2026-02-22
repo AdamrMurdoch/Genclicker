@@ -704,6 +704,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5316867753845879670, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5958980850090742179, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_Color.a
       value: 0.9882353
@@ -770,15 +774,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8233389985232447987, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.31
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 8233389985232447987, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.31
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 8233389985232447987, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.31
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 8233389985232447987, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -1247,6 +1251,7 @@ GameObject:
   - component: {fileID: 302966223}
   - component: {fileID: 302966227}
   - component: {fileID: 302966226}
+  - component: {fileID: 302966228}
   m_Layer: 0
   m_Name: Item 1
   m_TagString: Untagged
@@ -1453,6 +1458,20 @@ MonoBehaviour:
           m_StringArgument: Small Plane
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &302966228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302966221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2aea6d305663d4985f5ace920832e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AircraftUIManager
+  ItemName: small plane
+  ItemStatusText: {fileID: 355596411}
 --- !u!1 &319685024
 GameObject:
   m_ObjectHideFlags: 0
@@ -1467,6 +1486,7 @@ GameObject:
   - component: {fileID: 319685028}
   - component: {fileID: 319685027}
   - component: {fileID: 319685026}
+  - component: {fileID: 319685031}
   m_Layer: 0
   m_Name: Item 2
   m_TagString: Untagged
@@ -1673,6 +1693,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 319685024}
   m_CullTransparentMesh: 1
+--- !u!114 &319685031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319685024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2aea6d305663d4985f5ace920832e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AircraftUIManager
+  ItemName: private jet
+  ItemStatusText: {fileID: 1416471655}
 --- !u!1 &355596408
 GameObject:
   m_ObjectHideFlags: 0
@@ -2528,6 +2562,7 @@ GameObject:
   - component: {fileID: 1175695926}
   - component: {fileID: 1175695925}
   - component: {fileID: 1175695924}
+  - component: {fileID: 1175695929}
   m_Layer: 0
   m_Name: Item 3
   m_TagString: Untagged
@@ -2734,6 +2769,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1175695922}
   m_CullTransparentMesh: 1
+--- !u!114 &1175695929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1175695922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2aea6d305663d4985f5ace920832e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AircraftUIManager
+  ItemName: commercial plane
+  ItemStatusText: {fileID: 978459035}
 --- !u!1 &1215727969
 GameObject:
   m_ObjectHideFlags: 0
@@ -3436,6 +3485,7 @@ GameObject:
   - component: {fileID: 1670176320}
   - component: {fileID: 1670176319}
   - component: {fileID: 1670176318}
+  - component: {fileID: 1670176321}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -3526,6 +3576,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1670176321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670176316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 509ddd793ad834347a4c5cdb8b72e658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Save
 --- !u!1 &1671023220
 GameObject:
   m_ObjectHideFlags: 0

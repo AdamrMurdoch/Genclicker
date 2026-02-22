@@ -57,6 +57,7 @@ public class AircraftPurchase : MonoBehaviour
                     if(SaveSingleton.Instance.Save.PlayerMoney >= price)
                     {
                         SaveSingleton.Instance.Save.PlayerMoney -= price;
+                        SaveSingleton.Instance.Save.SmallPlanePurchased = true;
                         Header.text = "Small Plane Purchased!";
                         PopupExtraDescription = $"You successfully purchased a {ItemID} for ";
                         PopupExtra2Description = $"This asset will now provide you with {string.Format("${0:n0}", perClickPrice)} per click.";
@@ -76,6 +77,7 @@ public class AircraftPurchase : MonoBehaviour
                     if(SaveSingleton.Instance.Save.PlayerMoney >= price)
                     {
                         SaveSingleton.Instance.Save.PlayerMoney -= price;
+                        SaveSingleton.Instance.Save.PrivateJetPurchased = true;
                         Header.text = "Private Jet Purchased!";
                         PopupExtraDescription = $"You successfully purchased a {ItemID} for ";
                         PopupExtra2Description = $"This asset will now provide you with {string.Format("${0:n0}", perClickPrice)} per click.";
@@ -95,6 +97,7 @@ public class AircraftPurchase : MonoBehaviour
                     if(SaveSingleton.Instance.Save.PlayerMoney >= price)
                     {
                         SaveSingleton.Instance.Save.PlayerMoney -= price;
+                        SaveSingleton.Instance.Save.CommercialPlanePurchased = true;
                         Header.text = "Commercial Plane Purchased!";
                         PopupExtraDescription = $"You successfully purchased a {ItemID} for ";
                         PopupExtra2Description = $"This asset will now provide you with {string.Format("${0:n0}", perClickPrice)} per click.";

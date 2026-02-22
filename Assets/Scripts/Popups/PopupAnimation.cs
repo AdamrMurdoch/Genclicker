@@ -47,9 +47,9 @@ public class PopupAnimation : MonoBehaviour
     private IEnumerator AnimatePopupBounce(RectTransform rectTransform)
     {
         float startScale = 0.3f;
-        float overshootScale = 1.01f;
-        float undershootScale = 0.98f;
-        float targetScale = 1f;
+        float overshootScale = 0.36f;
+        float undershootScale = 0.32f;
+        float targetScale = 0.35f;
 
         float growDuration = 0.15f;
         float bounceDuration = 0.22f;

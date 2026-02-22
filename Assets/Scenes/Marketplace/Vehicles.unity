@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 151847715}
   - component: {fileID: 151847714}
   - component: {fileID: 151847713}
+  - component: {fileID: 151847718}
   m_Layer: 0
   m_Name: Item 4
   m_TagString: Untagged
@@ -276,7 +277,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 151847716}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1260413620}
+        m_TargetAssemblyTypeName: VehiclePurchase, Assembly-CSharp
+        m_MethodName: PurchaseSportsCar
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!225 &151847715
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -327,6 +340,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 151847711}
   m_CullTransparentMesh: 1
+--- !u!114 &151847718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151847711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1148cb094b0fc55469f85a4a23a13264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehiclesUIManager
+  ItemName: sports car
+  ItemStatusText: {fileID: 817140591}
 --- !u!1 &155390106
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,6 +619,7 @@ GameObject:
   - component: {fileID: 192694086}
   - component: {fileID: 192694085}
   - component: {fileID: 192694084}
+  - component: {fileID: 192694089}
   m_Layer: 0
   m_Name: Item 3
   m_TagString: Untagged
@@ -735,7 +763,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 192694087}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1260413620}
+        m_TargetAssemblyTypeName: VehiclePurchase, Assembly-CSharp
+        m_MethodName: PurchaseSUV
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!225 &192694086
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -786,6 +826,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 192694082}
   m_CullTransparentMesh: 1
+--- !u!114 &192694089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192694082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1148cb094b0fc55469f85a4a23a13264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehiclesUIManager
+  ItemName: suv
+  ItemStatusText: {fileID: 1225966553}
 --- !u!1 &207805340
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,6 +1287,7 @@ GameObject:
   - component: {fileID: 302966223}
   - component: {fileID: 302966227}
   - component: {fileID: 302966226}
+  - component: {fileID: 302966228}
   m_Layer: 0
   m_Name: Item 1
   m_TagString: Untagged
@@ -1426,7 +1481,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 302966224}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1260413620}
+        m_TargetAssemblyTypeName: VehiclePurchase, Assembly-CSharp
+        m_MethodName: PurchaseHatchback
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &302966228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302966221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1148cb094b0fc55469f85a4a23a13264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehiclesUIManager
+  ItemName: hatchback
+  ItemStatusText: {fileID: 355596411}
 --- !u!1 &355596408
 GameObject:
   m_ObjectHideFlags: 0
@@ -2243,6 +2324,7 @@ GameObject:
   - component: {fileID: 736899126}
   - component: {fileID: 736899125}
   - component: {fileID: 736899124}
+  - component: {fileID: 736899129}
   m_Layer: 0
   m_Name: Item 6
   m_TagString: Untagged
@@ -2386,7 +2468,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 736899127}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1260413620}
+        m_TargetAssemblyTypeName: VehiclePurchase, Assembly-CSharp
+        m_MethodName: PurchaseHyperCar
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!225 &736899126
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2437,6 +2531,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 736899122}
   m_CullTransparentMesh: 1
+--- !u!114 &736899129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736899122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1148cb094b0fc55469f85a4a23a13264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehiclesUIManager
+  ItemName: hyper car
+  ItemStatusText: {fileID: 284237660}
 --- !u!1 &817140588
 GameObject:
   m_ObjectHideFlags: 0
@@ -2601,6 +2709,7 @@ GameObject:
   - component: {fileID: 881064583}
   - component: {fileID: 881064582}
   - component: {fileID: 881064581}
+  - component: {fileID: 881064586}
   m_Layer: 0
   m_Name: Item 5
   m_TagString: Untagged
@@ -2744,7 +2853,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 881064584}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1260413620}
+        m_TargetAssemblyTypeName: VehiclePurchase, Assembly-CSharp
+        m_MethodName: PurchaseSuperCar
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!225 &881064583
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2795,6 +2916,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881064579}
   m_CullTransparentMesh: 1
+--- !u!114 &881064586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881064579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1148cb094b0fc55469f85a4a23a13264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehiclesUIManager
+  ItemName: super car
+  ItemStatusText: {fileID: 2060118160}
 --- !u!1 &912993716
 GameObject:
   m_ObjectHideFlags: 0
@@ -3657,6 +3792,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5316867753845879670, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316867753845879670, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316867753845879670, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316867753845879670, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3703,6 +3850,10 @@ PrefabInstance:
     - target: {fileID: 5316867753845879670, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316867753845879670, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5958980850090742179, guid: b19dbb8232d8ecc4a93f52986654d33e, type: 3}
       propertyPath: m_Color.a
@@ -4594,6 +4745,7 @@ GameObject:
   - component: {fileID: 1670176320}
   - component: {fileID: 1670176319}
   - component: {fileID: 1670176318}
+  - component: {fileID: 1670176321}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -4684,6 +4836,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1670176321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670176316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 509ddd793ad834347a4c5cdb8b72e658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Save
 --- !u!1 &1671023220
 GameObject:
   m_ObjectHideFlags: 0
@@ -5574,6 +5738,7 @@ GameObject:
   - component: {fileID: 1917738441}
   - component: {fileID: 1917738440}
   - component: {fileID: 1917738439}
+  - component: {fileID: 1917738444}
   m_Layer: 0
   m_Name: Item 2
   m_TagString: Untagged
@@ -5717,7 +5882,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1917738442}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1260413620}
+        m_TargetAssemblyTypeName: VehiclePurchase, Assembly-CSharp
+        m_MethodName: PurchaseSedan
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!225 &1917738441
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -5768,6 +5945,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1917738437}
   m_CullTransparentMesh: 1
+--- !u!114 &1917738444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917738437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1148cb094b0fc55469f85a4a23a13264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehiclesUIManager
+  ItemName: sedan
+  ItemStatusText: {fileID: 1999216776}
 --- !u!1 &1999216773
 GameObject:
   m_ObjectHideFlags: 0
